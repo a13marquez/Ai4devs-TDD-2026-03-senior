@@ -3,6 +3,13 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PHONE_REGEX = /^(6|7|9)\d{8}$/;
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
+const isValidDateString = (dateStr: string): boolean => {
+    if (!DATE_REGEX.test(dateStr)) return false;
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+};
+
 //Length validations according to the database schema
 
 export const validateName = (name: string) => {
@@ -24,7 +31,7 @@ export const validatePhone = (phone: string) => {
 };
 
 export const validateDate = (date: string) => {
-    if (!date || !DATE_REGEX.test(date)) {
+    if (!date || !isValidDateString(date)) {
         throw new Error('Invalid date');
     }
 };
@@ -79,15 +86,18 @@ export const validateCV = (cv: any) => {
 
 export const validateCandidateData = (data: any) => {
     if (data.id) {
-        // If id is provided, we are editing an existing candidate, so fields are not mandatory
-        return;
+        if (data.firstName !== undefined) validateName(data.firstName);
+        if (data.lastName !== undefined) validateName(data.lastName);
+        if (data.email !== undefined) validateEmail(data.email);
+        if (data.phone !== undefined) validatePhone(data.phone);
+        if (data.address !== undefined) validateAddress(data.address);
+    } else {
+        validateName(data.firstName);
+        validateName(data.lastName);
+        validateEmail(data.email);
+        validatePhone(data.phone);
+        validateAddress(data.address);
     }
-
-    validateName(data.firstName); 
-    validateName(data.lastName); 
-    validateEmail(data.email);
-    validatePhone(data.phone);
-    validateAddress(data.address);
 
     if (data.educations) {
         for (const education of data.educations) {
