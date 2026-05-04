@@ -5,37 +5,37 @@ const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 //Length validations according to the database schema
 
-const validateName = (name: string) => {
+export const validateName = (name: string) => {
     if (!name || name.length < 2 || name.length > 100 || !NAME_REGEX.test(name)) {
         throw new Error('Invalid name');
     }
 };
 
-const validateEmail = (email: string) => {
+export const validateEmail = (email: string) => {
     if (!email || !EMAIL_REGEX.test(email)) {
         throw new Error('Invalid email');
     }
 };
 
-const validatePhone = (phone: string) => {
+export const validatePhone = (phone: string) => {
     if (phone && !PHONE_REGEX.test(phone)) {
         throw new Error('Invalid phone');
     }
 };
 
-const validateDate = (date: string) => {
+export const validateDate = (date: string) => {
     if (!date || !DATE_REGEX.test(date)) {
         throw new Error('Invalid date');
     }
 };
 
-const validateAddress = (address: string) => {
+export const validateAddress = (address: string) => {
     if (address && address.length > 100) {
         throw new Error('Invalid address');
     }
 };
 
-const validateEducation = (education: any) => {
+export const validateEducation = (education: any) => {
     if (!education.institution || education.institution.length > 100) {
         throw new Error('Invalid institution');
     }
@@ -51,7 +51,7 @@ const validateEducation = (education: any) => {
     }
 };
 
-const validateExperience = (experience: any) => {
+export const validateExperience = (experience: any) => {
     if (!experience.company || experience.company.length > 100) {
         throw new Error('Invalid company');
     }
@@ -71,7 +71,7 @@ const validateExperience = (experience: any) => {
     }
 };
 
-const validateCV = (cv: any) => {
+export const validateCV = (cv: any) => {
     if (typeof cv !== 'object' || !cv.filePath || typeof cv.filePath !== 'string' || !cv.fileType || typeof cv.fileType !== 'string') {
         throw new Error('Invalid CV data');
     }
